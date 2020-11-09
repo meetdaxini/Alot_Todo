@@ -7,6 +7,7 @@ from .forms import TodoForm
 from .models import Todo
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, EmptyPage
 
 # Create your views here.
 def home(request):
@@ -88,14 +89,27 @@ def mytodo(request):
 def alltodo(request):
     todos = Todo.objects.filter(user=request.user, completed_time=None).order_by('-created_time')
     todo_count = len(todos)
-    params = {'todos': todos, 'todo_count': todo_count}
+    pages = Paginator(todos, 10)
+    page_num = request.GET.get('page', 1)
+    try:
+        page = pages.page(page_num)
+    except EmptyPage:
+        page = pages.page(1)
+    params = {'todos': todos, 'todo_count': todo_count, 'page' : page}
     return render(request, 'todo/alltodo.html', params)
 
 @login_required
 def allcompletedtodo(request):
     completed_todos = Todo.objects.filter(user=request.user, completed_time__isnull=False).order_by('-completed_time')
     completedtodo_count = len(completed_todos)
-    params = {'comps': completed_todos, 'comp_count' : completedtodo_count}
+    pages = Paginator(completed_todos, 10)
+    page_num = request.GET.get('page', 1)
+    try:
+        page = pages.page(page_num)
+    except EmptyPage:
+        page = pages.page(1)
+    params = {'comps': completed_todos, 'comp_count' : completedtodo_count, 'page' : page}
+
     return render(request, 'todo/allcompletetodo.html', params)
 
 @login_required

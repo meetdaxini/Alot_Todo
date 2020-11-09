@@ -13,6 +13,9 @@ AlotTodo
     
     <p> You have {{ completedtodo_count }} task{{ completedtodo_count|pluralize }} completed.</p>
     
+    <a href="{% url 'todo:addtodo' %}">
+        <button>Add New</button>
+    </a>
     <a href="{% url 'todo:mytodo' %}"><button type="submit">Go to your todo list</button></a>
     {% endif %}
 {% endblock content%}
