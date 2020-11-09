@@ -1,0 +1,19 @@
+{% extends 'todo/base.html' %}
+
+{% block title%}
+AlotTodo
+{% endblock%}
+
+
+{% block content%}
+
+
+{% if user.is_authenticated %}
+    <p> You have {{ todo_count }} task{{ todo_count|pluralize }} left.</p>
+    
+    <p> You have {{ completedtodo_count }} task{{ completedtodo_count|pluralize }} completed.</p>
+    
+    <a href="{% url 'todo:mytodo' %}"><button type="submit">Go to your todo list</button></a>
+    {% endif %}
+{% endblock content%}
+

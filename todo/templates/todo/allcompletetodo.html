@@ -1,0 +1,18 @@
+{% extends 'todo/base.html' %}
+
+{% block title%}
+todo
+{% endblock%}
+
+{% block content%}
+
+<h2>All Completed Tasks</h2>
+<p>{{ comp_count }} task{{ comp_count|pluralize }} completed.</p>
+<ul>
+{% for comp in comps %}
+<a href="{% url 'todo:viewtodo' comp.id %}"> <li>{{comp}}</li> </a>
+{% endfor %}
+</ul>
+
+{% endblock content%}
+

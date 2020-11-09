@@ -1,0 +1,40 @@
+{% extends 'todo/base.html' %}
+
+{% block title%}
+todo
+{% endblock%}
+
+{% block myactive %}
+active
+{% endblock %}
+
+{% block content%}
+
+<h2>To Do</h2>
+<p>{{ todo_count }} task{{ todo_count|pluralize }} left.</p>
+<ul>
+{% for todo in todos %}
+<a href="{% url 'todo:viewtodo' todo.id %}"> <li>{{todo}}</li> </a>
+{% endfor %}
+{% if todo_count > 5 %}
+</ul>
+<a href="{% url 'todo:addtodo' %}">
+<button>Add New</button>
+</a>
+<a href="{% url 'todo:alltodo' %}">
+<button>view all remaining to do</button>
+</a>
+{% endif %}
+
+<h2>Already Done</h2>
+<p>{{ completedtodo_count }} task{{ completedtodo_count|pluralize }} completed.</p>
+<ul>
+{% for comp in comps %}
+<a href="{% url 'todo:viewtodo' comp.id %}"> <li>{{comp}}</li> </a>
+{% endfor %}
+</ul>
+<a href="{% url 'todo:allcompletedtodo' %}">
+<button>view all completed</button>
+</a>
+{% endblock content%}
+

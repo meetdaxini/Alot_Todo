@@ -1,0 +1,19 @@
+{% extends 'todo/base.html' %}
+
+{% block title%}
+All todo
+{% endblock%}
+
+{% block content%}
+
+<h2>To Do</h2>
+<p>{{ todo_count }} task{{ todo_count|pluralize }} left.</p>
+<ul>
+{% for todo in todos %}
+<a href="{% url 'todo:viewtodo' todo.id %}"> <li>{{todo}}</li> </a>
+{% endfor %}
+</ul>
+
+
+{% endblock content%}
+
