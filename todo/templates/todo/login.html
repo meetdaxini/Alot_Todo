@@ -1,4 +1,5 @@
 {% extends 'todo/base.html' %}
+{% load crispy_forms_tags %}
 
 {% block title%}
 login
@@ -6,11 +7,23 @@ login
 
 {% block loginactive %}active{% endblock %}
 {% block content%}
-<h1>Login</h1>
-<p>{{error}}</p>
-<form action="" method="POST">
-{% csrf_token %}
-{{form.as_p}}
-<button type="submit">Login</button>
-</form>
+
+<div class="container rounded shadow-lg px-4 py-5 mt-5 bg-white logbox">
+    <h2 class="text-center"> <i class='bx bxs-user'></i> Login</h2>
+    <p>{{error}}</p>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="form-group text-center">
+            {{ form.username|as_crispy_field }}
+        </div>
+        <div class="form-group text-center">
+            {{ form.password|as_crispy_field }}
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-info">Login</button>
+        </div>
+
+    </form>
+</div>
+
 {% endblock content%}

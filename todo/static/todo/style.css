@@ -1,0 +1,143 @@
+/*===== VARIABLES CSS =====*/
+:root{
+
+  /*===== Colors =====*/
+  --first-color:  #2a9ac7;
+  --first-color-dark: #0D424D;
+  --first-color-darken: #0B3142;
+  --text-color: #2b3321; 
+  --first-color-light: #eae7e6;
+  --first-color-lighten: #fffafa;
+
+  /*===== Font and typography =====*/
+  --body-font: "Roboto Condensed", sans-serif;
+
+}
+
+/*===== BASE =====*/
+*,::before,::after{
+  box-sizing: border-box;
+}
+
+
+
+html{
+  scroll-behavior: smooth;
+  min-height: 100vh;
+
+}
+
+
+body {
+    background-color: #E2E8DD;
+    position: relative;
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+
+}
+
+
+ul{
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  
+}
+
+a{
+  text-decoration: none;
+  color: var(--text-color);
+}
+
+nav{
+    background-color: var(--first-color);
+}
+
+/* img{
+  max-width: 100%;
+  height: auto;
+  display: block;
+} */
+
+
+/*===== CLASS CSS ===== */
+
+/* .section{
+  padding: 4rem 0 2rem;
+} */
+
+.logbox{
+    max-width: 420px;
+    margin-bottom: 3rem;
+}
+
+
+/* ===== FOOTER =====*/
+/* a{
+     !important;
+} */
+.footer {
+    background-color: var(--first-color-darken);
+    color: var(--first-color-lighten);
+    text-align: center;
+    width: 100%;
+    padding: 1.5rem 0 0rem;
+    margin-top: auto;
+}
+
+.footer__social{
+    margin-bottom: 1rem;
+  }
+  
+.footer__link{
+    display: inline-flex;
+    background-color: var(--first-color);
+    color: var(--first-color-lighten);
+    font-size: 1.1rem;
+    border-radius: 50%;
+    padding: .40em;
+    margin: 0 var(--mb-1);
+    transition: .3s;
+  }
+  
+.footer__link:hover{
+    text-decoration: none;
+    background-color: var(--first-color-lighten);
+    color: var(--first-color);
+  }
+  
+
+
+
+
+
+  /* github fork icon */
+
+.github-corner svg {
+    position: absolute;
+    right: 0;
+    top: 0;
+    mix-blend-mode: darken;
+    color: #ffffff;
+    fill: var(--first-color-darken);
+}
+
+.github-corner:hover .octo-arm {
+    animation: octocat-wave .56s;
+}
+
+@keyframes octocat-wave {
+    0%, 100% {
+        transform: rotate(0);
+    }
+    20%, 60% {
+        transform: rotate(-20deg);
+    }
+    40%, 80% {
+        transform: rotate(10deg);
+    }
+}
+
+
