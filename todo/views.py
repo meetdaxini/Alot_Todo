@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404, get_list_or_40
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.db import IntegrityError
+from django.db.models import Q
 from django.contrib.auth import login, logout, authenticate
 from .forms import TodoForm, UserCreateForm
 from .models import Todo
@@ -86,8 +87,18 @@ def mytodo(request):
     return render(request, 'todo/mytodo.html', params)
 
 @login_required
+def search(request):
+    query = request.GET.get('query', '')
+    or_query = Q(task__icontains=query)
+    or_query.add(Q(desc__icontains=query), Q.OR)
+    todos = Todo.objects.filter(or_query, user=request.user).order_by('-imp', '-completed_time', '-created_time', )
+    
+    params = {'todos': todos, 'query' : query }
+    return render(request, 'todo/search.html', params)
+
+@login_required
 def alltodo(request):
-    todos = Todo.objects.filter(user=request.user, completed_time=None).order_by('-created_time')
+    todos = Todo.objects.filter(user=request.user, completed_time=None).order_by( '-created_time')
     todo_count = len(todos)
     pages = Paginator(todos, 10)
     page_num = request.GET.get('page', 1)

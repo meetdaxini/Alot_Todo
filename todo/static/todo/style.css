@@ -64,20 +64,108 @@ nav{
 
 /*===== CLASS CSS ===== */
 
-/* .section{
-  padding: 4rem 0 2rem;
-} */
+@media (min-width: 768px){
+.form-inline .form-control {
+    width: 30rem;
+}
+}
+
+.primary-nav{
+    margin: 0 0.5rem;
+    padding: 0;
+    background-color: aliceblue;
+    color: var(--text-color);
+    border: none;
+}
+
+.btn-body{
+    margin: 0 0.5rem;
+    padding: 0;
+    background-color: var(--first-color-darken);
+    border: none;
+}
+
+.btn-body:hover{
+
+    background-color: var(--first-color);
+}
+
+.info-nav{
+    margin: 0 0.5rem;
+    padding: 0;
+    background-color: var(--first-color);
+    border: none;
+}
+
+.a-sign{
+ color: aliceblue !important;
+ font-weight: bold !important;
+
+}
+
+.a-sign:hover{
+ color: var(--text-color) !important;
+}
+
+.a-body{
+ color: aliceblue !important;
+ font-weight: bold !important;
+
+}
+
+.a-body:hover{
+ color: var(--text-color) !important;
+}
+
+.a-log{
+ color: var(--first-color-darken) !important;
+ font-weight: bold !important;
+}
+
+.a-log:hover{
+ color: aliceblue !important;
+}
+
+.join-btn{
+ padding: 0rem 0.62rem;
+}
+
+@media (max-width: 600px){
+    .btn-primary{
+        margin: 0.5rem;
+        padding: 0.5rem 0.9rem;
+
+    }
+    
+    .btn-info{
+        margin: 0.5rem;
+        padding: 0.5rem;
+
+
+    }
+
+}
 
 .logbox{
     max-width: 420px;
     margin-bottom: 3rem;
 }
 
+.search-btn{
+    border: none;
+    color: var(--text-color);
+    font-size: larger;
+}
+
+.search-btn:hover{
+    border: none;
+    color: aliceblue;
+    background-color: transparent;
+
+}
 
 /* ===== FOOTER =====*/
-/* a{
-     !important;
-} */
+
 .footer {
     background-color: var(--first-color-darken);
     color: var(--first-color-lighten);

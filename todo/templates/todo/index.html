@@ -9,14 +9,32 @@ AlotTodo
 
 
 {% if user.is_authenticated %}
-    <p> You have {{ todo_count }} task{{ todo_count|pluralize }} left.</p>
-    
-    <p> You have {{ completedtodo_count }} task{{ completedtodo_count|pluralize }} completed.</p>
-    
-    <a href="{% url 'todo:addtodo' %}">
-        <button>Add New</button>
-    </a>
-    <a href="{% url 'todo:mytodo' %}"><button type="submit">Go to your todo list</button></a>
-    {% endif %}
-{% endblock content%}
+<p> You have {{ todo_count }} task{{ todo_count|pluralize }} left.</p>
 
+<p> You have {{ completedtodo_count }} task{{ completedtodo_count|pluralize }} completed.</p>
+
+<a href="{% url 'todo:addtodo' %}">
+    <button>Add New</button>
+</a>
+<a href="{% url 'todo:mytodo' %}"><button type="submit">Go to your todo list</button></a>
+{% else %}
+<br>
+<br>
+<div class="row justify-content-center mt-5">
+    <div class="col-md-7 text-center">
+        <h1>Simply Yours Todos!</h1>
+        <p>When you have <strong>
+                <em>Alot Todo</em>
+            </strong> we help you manage all of your tasks in life that matters most to you. Your new
+            organized life awaits.</p>
+
+        <button type="button" class="btn btn-body join-btn">
+            <a class="nav-link a-body"
+                href="{% url 'todo:signupuser' %}">Join</a></button>
+        <button type="button" class="btn btn-body">
+            <a class="nav-link a-body"
+                href="{% url 'todo:loginuser' %}">Login</a></button>
+    </div>
+</div>
+{% endif %}
+{% endblock content%}

@@ -13,6 +13,7 @@
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" type="text/css" href="{% static 'todo/style.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap" rel="stylesheet" />
+    <link rel="shortcut icon" href="{% static 'todo/icon/favicon.ico' %}">
     <title>{% block title %}{% endblock %}</title>
 
 </head>
@@ -23,28 +24,30 @@
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
+        <di class="container">
+            <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+                <a class="navbar-brand" href="{% url 'todo:home' %}"><i class='bx bxs-check-square bx-sm'>ALotTodo</i></a>
 
-            <a class="navbar-brand" href="{% url 'todo:home' %}">ALotTodo</a>
 
             {% if user.is_authenticated %}
-            <form class="form-inline">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search Tasks</button>
+            <form class="form-inline" method="GET" action="{% url 'todo:search' %}">
+                <input class="form-control mr-sm-1" type="search" placeholder="Search Todos" aria-label="Search" name="query" required> 
+                <div>
+                    <button class="btn btn-outline-dark my-2 my-sm-0 search-btn" type="submit"><i class='bx bx-search'></i></button>
+                </div>
             </form>
             {% endif %}
 
             <ul class="navbar-nav">
                 {% if user.is_authenticated %}
-                <li class="nav-item"><a class="nav-link {% block myactive %}{% endblock %}"
-                        href="{% url 'todo:mytodo' %}">My Todo's</a></li>
+                <li class="nav-item"><a class="nav-link active" href="{% url 'todo:home' %}">Home</a>
+                </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {{user.username}}
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">My Account</a>
                         <a class="dropdown-item" href="{% url 'todo:alltodo' %}">All Remaining Tasks</a>
                         <a class="dropdown-item" href="{% url 'todo:allcompletedtodo' %}">All Completed Tasks</a>
                         <form action="{% url 'todo:logoutuser' %}" method="POST">
@@ -54,13 +57,16 @@
                     </div>
                 </li>
                 {% else %}
-                <li class="nav-item"><a class="nav-link {% block signactive %}{% endblock %}"
-                        href="{% url 'todo:signupuser' %}">Sign up</a></li>
-                <li class="nav-item"><a class="nav-link {% block loginactive %}{% endblock %}"
-                        href="{% url 'todo:loginuser' %}">Login</a></li>
+                <li class="nav-item"><button type="button" class="btn btn-info info-nav">
+                    <a class="nav-link a-sign {% block signactive %}{% endblock %}"
+                        href="{% url 'todo:signupuser' %}">Sign up</a></button></li>
+                <li class="nav-item"><button type="button" class="btn btn-primary primary-nav">
+                    <a class="nav-link a-log {% block loginactive %}{% endblock %}"
+                        href="{% url 'todo:loginuser' %}">Login</a></button></li>
                 {% endif %}
             </ul>
         </div>
+    </di>
 
         <!-- git fork -->
         <a href="https://github.com/meetdaxini/alot_todo" title="Fork me on GitHub" class="github-corner"
@@ -93,7 +99,8 @@
         {% endif %}
     </div>
 
-
+<br>
+<br>
     <!--===== FOOTER =====-->
     <div class="footer">
         <div class="footer__social">
