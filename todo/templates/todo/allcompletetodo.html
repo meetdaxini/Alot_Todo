@@ -25,9 +25,7 @@ completed todo
               class="button__list button__check"><i class='bx bx-checkbox-checked bx-tada-hover bx-sm'></i></button> </td>
           <td  class="todo-title">
           <a href="{% url 'todo:viewtodo' comp.id %}" class="todo__list"> <del>
-          {% if comp.task|length < 45 %} {{comp}}
-          {% else %} {{comp.task|truncatechars:42}}
-          {% endif %}    
+          {{comp.task|truncatechars:35}}
           </del></a></td>
           <td><button type="submit" formaction="{% url 'todo:imptodo' comp.id %}" class="button__list button__imp"><i
                 class="bx bxs-error bx-flashing-hover bx-sm"></i></button> </td>

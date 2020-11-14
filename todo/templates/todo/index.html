@@ -27,9 +27,7 @@ AlotTodo
             <td> <button type="submit" formaction="{% url 'todo:completetodo' todo.id %}"
                 class="button__list button__check"><i class='bx bx-checkbox bx-tada-hover bx-sm'></i></button> </td>
             <td class="todo-title"><a href="{% url 'todo:viewtodo' todo.id %}" class="todo__list"> 
-              {% if todo.task|length < 45 %} {{todo}}
-              {% else %} {{todo.task|truncatechars:42}}
-              {% endif %}
+            {{todo.task|truncatechars:35}}
             </a></td>
             <td><button type="submit" formaction="{% url 'todo:imptodo' todo.id %}" class="button__list button__imp"><i
                   class="bx bxs-error bx-flashing-hover bx-sm"></i></button> </td>
@@ -61,6 +59,7 @@ AlotTodo
 </div>
 {% else %}
 <br>
+<div class="container">
 <div class="d-flex justify-content-center mt-5">
   <div class="col-md-7 text-center">
     <h1>Simply Yours Todos!</h1>
@@ -74,6 +73,7 @@ AlotTodo
     <button type="button" class="btn btn-body">
       <a class="nav-link a-body" href="{% url 'todo:loginuser' %}">Login</a></button>
   </div>
+</div>
 </div>
 {% endif %}
 {% endblock content%}

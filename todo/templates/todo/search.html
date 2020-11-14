@@ -31,9 +31,7 @@ search
           <td> <button type="submit" formaction="{% url 'todo:completetodo' todo.id %}"
               class="button__list button__check"><i class='bx {% if todo.completed_time %}bx-checkbox-checked{% else %}bx-checkbox{% endif %} bx-tada-hover bx-sm'></i></button> </td>
           <td class="todo-title"><a href="{% url 'todo:viewtodo' todo.id %}" class="todo__list"> {% if todo.completed_time %}<del>{% endif %}
-          {% if todo.task|length < 45 %} {{todo}}
-              {% else %} {{todo.task|truncatechars:42}}
-          {% endif %}    
+          {{todo.task|truncatechars:35}}
           {% if todo.completed_time %}</del>{% endif %}</a></td>
           <td><button type="submit" formaction="{% url 'todo:imptodo' todo.id %}" class="button__list button__imp"><i
                 class="bx bxs-error bx-flashing-hover bx-sm"></i></button> </td>
