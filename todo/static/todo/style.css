@@ -35,6 +35,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    min-width: 100vh !important;
 
 }
 
@@ -51,15 +52,18 @@ a{
   color: var(--text-color);
 }
 
-nav{
-    background-color: var(--first-color);
+a:hover{
+  text-decoration: none;
+  color: var(--text-color);
+  cursor: pointer;
 }
 
-/* img{
-  max-width: 100%;
-  height: auto;
-  display: block;
-} */
+nav{
+    background-color: var(--first-color);
+    margin-bottom: 2rem;
+}
+
+
 
 
 /*===== CLASS CSS ===== */
@@ -81,7 +85,7 @@ nav{
 .btn-body{
     margin: 0 0.5rem;
     padding: 0;
-    background-color: var(--first-color-darken);
+    background-color: var(--text-color);
     border: none;
 }
 
@@ -146,6 +150,7 @@ nav{
 
 }
 
+
 .logbox{
     max-width: 420px;
     margin-bottom: 3rem;
@@ -163,6 +168,176 @@ nav{
     background-color: transparent;
 
 }
+
+/* ===== todo home =====*/
+.todo__flex{
+    display: flex;
+    
+}
+
+/* ===== todo list =====*/
+.todo-list {
+    --spacer: 1rem;
+    grid-area: active;
+    background-color: white;
+    color: var(--text-color);
+    margin: var(--spacer);
+    width: 40rem;
+    min-height: 29rem;
+}
+  
+  .todo-header {
+    padding: var(--spacer);
+    background-color: var(--text-color);
+    color: aliceblue;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .list-title {
+    margin: 0 1em 0 0;
+  }
+  
+  .task-count {
+    margin: 0;
+    font-size: 1rem;
+  }
+  
+  .todo-body {
+    padding: var(--spacer);
+    position: relative;
+    width: 100%;
+  }
+
+  .task label {
+    display: flex-inline;
+    align-items: center;
+    position: relative;
+  }
+  
+  .task {
+    position: relative;
+    margin-bottom: 1.25em;
+    border-bottom: 0.5px solid rgba(131, 134, 127, 0.5);
+    border-collapse: collapse;
+  }
+  
+
+
+  .todo-arrows{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0%;
+  }
+
+.todo__list{
+  font-size: 1.4rem;
+  
+}
+
+.todo__list:hover{
+  font-weight: bold;
+
+}
+
+.button__list{
+  padding: 0%;
+  margin-top: .3rem;
+  border: none;
+  background-color: transparent;
+}
+
+.button__check:hover{
+color: var(--first-color);
+}
+
+.button__imp:hover{
+color: orange;
+}
+
+.button__del:hover{
+color: red;
+}
+
+.imp__todo{
+ background-color: rgba(240, 165, 2, 0.637);
+ 
+}
+
+.no-search{
+  text-align:center; 
+  margin-bottom:2rem;
+}
+
+.no-text{
+  margin:2rem;
+
+}
+
+.todo-title{
+  min-width: 29rem;
+  padding: 0%;
+  vertical-align: super;
+}
+
+.add-flex{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  background-color: var(--text-color);
+  max-height: 25rem;
+  max-width: 25rem;
+}
+
+.add-head{
+display: flex;
+background-color: var(--text-color);
+color: aliceblue;
+vertical-align: super;
+
+}
+
+.form-control{
+  width: 92%;
+}
+
+.form-add{
+  border: none;
+  border-radius: unset;
+  border-bottom: 0.5px solid  rgba(131, 134, 127, 0.5);
+}
+
+.form-desc{
+
+  border: 0.5px solid  rgba(131, 134, 127, 0.5);
+}
+
+.del-btn:hover{
+  background-color: red;
+}
+
+
+
+.update-flex{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  background-color: var(--text-color);
+}
+
+.error{
+  color: red;
+}
+
+
+
+
+
+
+
+
 
 /* ===== FOOTER =====*/
 

@@ -1,18 +1,64 @@
 {% extends 'todo/base.html' %}
 
 {% block title%}
-todo
+completed todo
 {% endblock%}
 
 {% block content%}
 
-<h2>All Completed Tasks</h2>
-<p>{{ comp_count }} task{{ comp_count|pluralize }} completed.</p>
-<ul>
-{% for comp in page %}
-<a href="{% url 'todo:viewtodo' comp.id %}"> <li>{{comp}}</li> </a>
-{% endfor %}
-</ul>
+<!-- todos -->
+<div>
+<div class="todo-list todo-list shadow-lg mb-5 bg-white rounded">
+  <div class="todo-header">
+    <h2 class="list-title">Completed</h2>
+    <p class="task-count">{{comps|length}} task{{ comps|length|pluralize }} completed.</p>
+  </div>
+
+  <table class="todo-body">
+    <tbody class="tasks">
+      {% for comp in page %}
+      <tr class="task {% if comp.imp %}imp__todo{% endif %}">
+        <form method="POST">
+          {% csrf_token %}
+
+          <td> <button type="submit" formaction="{% url 'todo:completetodo' comp.id %}"
+              class="button__list button__check"><i class='bx bx-checkbox-checked bx-tada-hover bx-sm'></i></button> </td>
+          <td  class="todo-title">
+          <a href="{% url 'todo:viewtodo' comp.id %}" class="todo__list"> <del>
+          {% if comp.task|length < 45 %} {{comp}}
+          {% else %} {{comp.task|truncatechars:42}}
+          {% endif %}    
+          </del></a></td>
+          <td><button type="submit" formaction="{% url 'todo:imptodo' comp.id %}" class="button__list button__imp"><i
+                class="bx bxs-error bx-flashing-hover bx-sm"></i></button> </td>
+          <td> <button type="submit" formaction="{% url 'todo:deletetodo' comp.id %}"
+              class="button__list button__del"><i class='bx bx-trash bx-burst-hover bx-sm'></i></button> </td>
+        
+            <input type="hidden" name="url" value="{{ request.get_full_path }}">
+        </form>
+    </tbody>
+    {% endfor %}
+    <!-- /task -->
+  </table>
+  <div class="todo-arrows">
+    {% if page.has_previous %}
+    <a href="?page={{page.previous_page_number}}" class="todo-arrow"><i
+        class="bx bxs-left-arrow-circle bx-fade-left-hover bx-md"></i></a>
+    {% endif %}
+    {% if page.has_next %}
+    <a href="?page={{page.next_page_number}}" class="todo-arrow"><i
+        class="bx bxs-right-arrow-circle bx-fade-right-hover bx-md"></i></a>
+    {% endif %}
+  </div>
+</div>
+  <div class="d-flex justify-content-center">
+  <button type="button" class="btn btn-body">
+    <a class="nav-link a-body" href="{% url 'todo:home' %}"><i
+        class='bx bx-checkbox bx-sm'>View Remaining</i></a></button>
+  </div>
+</div>
+
+
 
 {% endblock content%}
 

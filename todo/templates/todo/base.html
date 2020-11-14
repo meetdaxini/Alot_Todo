@@ -24,52 +24,55 @@
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <di class="container">
+        <div class="container">
             <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
-                <a class="navbar-brand" href="{% url 'todo:home' %}"><i class='bx bxs-check-square bx-sm'>ALotTodo</i></a>
+                <a class="navbar-brand" href="{% url 'todo:home' %}"><i
+                        class='bx bxs-check-square bx-sm'>ALotTodo</i></a>
 
 
-            {% if user.is_authenticated %}
-            <form class="form-inline" method="GET" action="{% url 'todo:search' %}">
-                <input class="form-control mr-sm-1" type="search" placeholder="Search Todos" aria-label="Search" name="query" required> 
-                <div>
-                    <button class="btn btn-outline-dark my-2 my-sm-0 search-btn" type="submit"><i class='bx bx-search'></i></button>
-                </div>
-            </form>
-            {% endif %}
-
-            <ul class="navbar-nav">
                 {% if user.is_authenticated %}
-                <li class="nav-item"><a class="nav-link active" href="{% url 'todo:home' %}">Home</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        {{user.username}}
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="{% url 'todo:alltodo' %}">All Remaining Tasks</a>
-                        <a class="dropdown-item" href="{% url 'todo:allcompletedtodo' %}">All Completed Tasks</a>
-                        <form action="{% url 'todo:logoutuser' %}" method="POST">
-                            {% csrf_token %}
-                            <button type="submit" class="dropdown-item">Log out</button>
-                        </form>
+                <form class="form-inline" method="GET" action="{% url 'todo:search' %}">
+                    <input class="form-control mr-sm-1" type="search" placeholder="Search Todos" aria-label="Search"
+                        name="query" {% if query %} value="{{ query }}" {% endif %} required>
+                    <div>
+                        <button class="btn btn-outline-dark my-2 my-sm-0 search-btn" type="submit"><i
+                                class='bx bx-search'></i></button>
                     </div>
-                </li>
-                {% else %}
-                <li class="nav-item"><button type="button" class="btn btn-info info-nav">
-                    <a class="nav-link a-sign {% block signactive %}{% endblock %}"
-                        href="{% url 'todo:signupuser' %}">Sign up</a></button></li>
-                <li class="nav-item"><button type="button" class="btn btn-primary primary-nav">
-                    <a class="nav-link a-log {% block loginactive %}{% endblock %}"
-                        href="{% url 'todo:loginuser' %}">Login</a></button></li>
+                </form>
                 {% endif %}
-            </ul>
+
+                <ul class="navbar-nav">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link active" href="{% url 'todo:home' %}">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{user.username}}
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="{% url 'todo:allcompletedtodo' %}"><i
+                                    class='bx bx-checkbox-checked bx-lg'>View Completed</i></a>
+                            <form action="{% url 'todo:logoutuser' %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="dropdown-item">Log out</button>
+                            </form>
+                        </div>
+                    </li>
+                    {% else %}
+                    <li class="nav-item"><button type="button" class="btn btn-info info-nav">
+                            <a class="nav-link a-sign {% block signactive %}{% endblock %}"
+                                href="{% url 'todo:signupuser' %}">Sign up</a></button></li>
+                    <li class="nav-item"><button type="button" class="btn btn-primary primary-nav">
+                            <a class="nav-link a-log {% block loginactive %}{% endblock %}"
+                                href="{% url 'todo:loginuser' %}">Login</a></button></li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
-    </di>
 
         <!-- git fork -->
-        <a href="https://github.com/meetdaxini/alot_todo" title="Fork me on GitHub" class="github-corner"
+        <a href="https://github.com/meetdaxini/Alot_Todo" title="Fork me on GitHub" class="github-corner"
             target="_blank"><svg width="58" height="58" viewBox="0 0 250 250">
                 <title>Fork me on GitHub</title>
                 <path d="M0 0h250v250"></path>
@@ -86,21 +89,53 @@
 
     </nav>
 
-    <div class="container">
-        {% block content %}
-        {% endblock %}
+    <div class="container ">
+        {% comment %} add todo {% endcomment %}
+        {% if user.is_authenticated and request.path != view_url %}
+        <div class="todo__flex">
 
+            <div class="add-flex  todo-list shadow-lg bg-white rounded">
+                <div class="add-head justify-content-center p-2">
+                    <div>
+                    <h2>Add Todo</h2>
+                    {% if messages %}
+                        {% for message in messages %}
+                        <p class="msg__{{ message.tags }} error">{{ message }}</p>
+                        {% endfor %}
+                    {% endif %}
+                    <p class="text-center error">{{error}}</p>
+                </div>
+                </div>
+                <form action="{% url 'todo:addtodo' %}" method="POST">
+                    {% csrf_token %}
 
-        {% if page.has_previous %}
-        <a href="?page={{page.previous_page_number}}" class="btn btn-outline-info mb4">previous</a>
-        {% endif %}
-        {% if page.has_next %}
-        <a href="?page={{page.next_page_number}}" class="btn btn-outline-info mb4">next</a>
-        {% endif %}
+                    <div class="form-group">
+                        <input class="form-control form-add p-2 mt-4 m-3 mb-4" name="task" placeholder="Task" maxlength="100" required>
+                        <textarea class="form-control form-desc p-2 m-3 mb-4" rows="6" name="desc"
+                            placeholder="Description"></textarea>
+                    </div>
+                    <div class="custom-control custom-switch mb-4">
+                        <input type="checkbox" class="custom-control-input" id="imp" name='imp'>
+                        <label class="custom-control-label" for="imp"><i
+                                class="bx bxs-error bx-flashing-hover bx-sm">Important!</i></label>
+                    </div>
+                    <div class="d-flex justify-content-center mb-4">
+                        <button type="submit" class="btn btn-body pd-9 nav-link a-body">
+                            <i class='bx bx-list-plus bx-md'></i></button>
+                    </div>
+                    <input type="hidden" name="url" value="{{ request.get_full_path }}">
+                </form>
+
+                {% endif %}
+            </div>
+            {% block content %}
+            {% endblock %}
+
+        </div>
     </div>
 
-<br>
-<br>
+    <br>
+    <br>
     <!--===== FOOTER =====-->
     <div class="footer">
         <div class="footer__social">

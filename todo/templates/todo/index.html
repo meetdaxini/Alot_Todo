@@ -7,34 +7,73 @@ AlotTodo
 
 {% block content%}
 
-
 {% if user.is_authenticated %}
-<p> You have {{ todo_count }} task{{ todo_count|pluralize }} left.</p>
 
-<p> You have {{ completedtodo_count }} task{{ completedtodo_count|pluralize }} completed.</p>
+<!-- todos -->
+<div>
+  <div class="todo-list shadow-lg mb-5 bg-white rounded">
+    <div class="todo-header">
+      <h2 class="list-title">{{user.username|upper}}'s List</h2>
+      <p class="task-count">{{todos|length}} task{{ todos|length|pluralize }} remaining</p>
+    </div>
 
-<a href="{% url 'todo:addtodo' %}">
-    <button>Add New</button>
-</a>
-<a href="{% url 'todo:mytodo' %}"><button type="submit">Go to your todo list</button></a>
+    <table class="todo-body">
+      <tbody class="tasks">
+        {% for todo in page %}
+        <tr class="task {% if todo.imp %}imp__todo{% endif %}">
+          <form method="POST">
+            {% csrf_token %}
+
+            <td> <button type="submit" formaction="{% url 'todo:completetodo' todo.id %}"
+                class="button__list button__check"><i class='bx bx-checkbox bx-tada-hover bx-sm'></i></button> </td>
+            <td class="todo-title"><a href="{% url 'todo:viewtodo' todo.id %}" class="todo__list"> 
+              {% if todo.task|length < 45 %} {{todo}}
+              {% else %} {{todo.task|truncatechars:42}}
+              {% endif %}
+            </a></td>
+            <td><button type="submit" formaction="{% url 'todo:imptodo' todo.id %}" class="button__list button__imp"><i
+                  class="bx bxs-error bx-flashing-hover bx-sm"></i></button> </td>
+            <td> <button type="submit" formaction="{% url 'todo:deletetodo' todo.id %}"
+                class="button__list button__del"><i class='bx bx-trash bx-burst-hover bx-sm'></i></button> </td>
+
+            <input type="hidden" name="url" value="{{ request.get_full_path }}">
+          </form>
+      </tbody>
+      {% endfor %}
+      <!-- /task -->
+    </table>
+    <div class="todo-arrows">
+      {% if page.has_previous %}
+      <a href="?page={{page.previous_page_number}}" class="todo-arrow"><i
+          class="bx bxs-left-arrow-circle bx-fade-left-hover bx-md"></i></a>
+      {% endif %}
+      {% if page.has_next %}
+      <a href="?page={{page.next_page_number}}" class="todo-arrow"><i
+          class="bx bxs-right-arrow-circle bx-fade-right-hover bx-md"></i></a>
+      {% endif %}
+    </div>
+  </div>
+  <div class="d-flex justify-content-center">
+  <button type="button" class="btn btn-body">
+    <a class="nav-link a-body" href="{% url 'todo:allcompletedtodo' %}"><i
+        class='bx bx-checkbox-checked bx-sm'>View Completed</i></a></button>
+  </div>
+</div>
 {% else %}
 <br>
-<br>
-<div class="row justify-content-center mt-5">
-    <div class="col-md-7 text-center">
-        <h1>Simply Yours Todos!</h1>
-        <p>When you have <strong>
-                <em>Alot Todo</em>
-            </strong> we help you manage all of your tasks in life that matters most to you. Your new
-            organized life awaits.</p>
+<div class="d-flex justify-content-center mt-5">
+  <div class="col-md-7 text-center">
+    <h1>Simply Yours Todos!</h1>
+    <p>When you have <strong>
+        <em>Alot Todo</em>
+      </strong> we help you manage all of your tasks in life that matters most to you. Your new
+      organized life awaits.</p>
 
-        <button type="button" class="btn btn-body join-btn">
-            <a class="nav-link a-body"
-                href="{% url 'todo:signupuser' %}">Join</a></button>
-        <button type="button" class="btn btn-body">
-            <a class="nav-link a-body"
-                href="{% url 'todo:loginuser' %}">Login</a></button>
-    </div>
+    <button type="button" class="btn btn-body join-btn">
+      <a class="nav-link a-body" href="{% url 'todo:signupuser' %}">Join</a></button>
+    <button type="button" class="btn btn-body">
+      <a class="nav-link a-body" href="{% url 'todo:loginuser' %}">Login</a></button>
+  </div>
 </div>
 {% endif %}
 {% endblock content%}

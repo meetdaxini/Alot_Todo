@@ -9,21 +9,25 @@ from .models import Todo
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage
+import re
+from django.contrib import messages
+
 
 # Create your views here.
 def home(request):
     params = dict()
     if request.user.is_authenticated:
-        get_todos = Todo.objects.filter(user=request.user, completed_time=None).order_by('-created_time')
-        todo_count = len(get_todos)
-        # print(todo_count)
-        todos = get_todos[:5]
-        get_completedtodos = Todo.objects.filter(user=request.user, completed_time__isnull=False).order_by('-completed_time')
-        completedtodo_count = len(get_completedtodos)
-        # print(completedtodos_count)
-        completedtodos = get_completedtodos[:5]
-        params = {'todos': todos, 'comps' : completedtodos, 'todo_count': todo_count, 'completedtodo_count' : completedtodo_count }
+        form = TodoForm()
+        todos = Todo.objects.filter(user=request.user, completed_time=None).order_by('-created_time')
+        pages = Paginator(todos, 10)
+        page_num = request.GET.get('page', 1)
+        try:
+            page = pages.page(page_num)
+        except EmptyPage:
+            page = pages.page(1)
 
+        params = {'todos': todos, 'page': page, 'form' : form}
+    
     return render(request, 'todo/index.html', params)
 
 def signupuser(request):
@@ -35,10 +39,9 @@ def signupuser(request):
                 user = User.objects.create_user(request.POST['username'], password=request.POST['password1'])
                 user.save()
                 login(request, user)
-                return redirect('todo:mytodo')
+                return redirect('todo:home')
             except IntegrityError:
                 params['error'] = 'Username already exists. Please use a different username!'
-
 
         else:
             params['error'] = 'Passwords did not match.'
@@ -50,13 +53,14 @@ def loginuser(request):
     params = {'form': form}
     if request.method == "POST":
         user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
-        
+       
         if user is None:
-            params['error'] = "Username and Passwords Don't macth!"
+            params['error'] = "Username and Passwords Don't match!"
             return render(request, 'todo/login.html', params)
         
         login(request, user)
-        return redirect('todo:mytodo')
+        url = request.GET.get('next','/')
+        return redirect(url)
 
     return render(request, 'todo/login.html', params)
 
@@ -66,60 +70,49 @@ def addtodo(request):
     params = {'form': form}
     if request.method == "POST":
         formtodo = TodoForm(request.POST)
-        newtodo = formtodo.save(commit=False)
-        newtodo.user = request.user
-        newtodo.save()
-        return redirect('todo:mytodo')
+        try:
+            newtodo = formtodo.save(commit=False)
+            newtodo.user = request.user
+            newtodo.save()
+        except ValueError:
+            messages.error(request, 'Bad Data Entered' )
+        
+        url = request.POST.get('url', '/')
+        return redirect(url)
 
-    return render(request, 'todo/addtodo.html', params)
 
-@login_required
-def mytodo(request):
-    get_todos = Todo.objects.filter(user=request.user, completed_time=None).order_by('-created_time')
-    todo_count = len(get_todos)
-    # print(todo_count)
-    todos = get_todos[:5]
-    get_completedtodos = Todo.objects.filter(user=request.user, completed_time__isnull=False).order_by('-completed_time')
-    completedtodo_count = len(get_completedtodos)
-    # print(completedtodos_count)
-    completedtodos = get_completedtodos[:5]
-    params = {'todos': todos, 'comps' : completedtodos, 'todo_count': todo_count, 'completedtodo_count' : completedtodo_count }
-    return render(request, 'todo/mytodo.html', params)
+
 
 @login_required
 def search(request):
-    query = request.GET.get('query', '')
-    or_query = Q(task__icontains=query)
-    or_query.add(Q(desc__icontains=query), Q.OR)
-    todos = Todo.objects.filter(or_query, user=request.user).order_by('-imp', '-completed_time', '-created_time', )
-    
-    params = {'todos': todos, 'query' : query }
-    return render(request, 'todo/search.html', params)
+    if 'query' in request.GET:
+        query = request.GET['query']
+        or_query = Q(task__icontains=query)
+        or_query.add(Q(desc__icontains=query), Q.OR)
+        todos = Todo.objects.filter(or_query, user=request.user).order_by('-imp', '-completed_time', '-created_time', )
+        pages = Paginator(todos, 10) 
+        page_num = request.GET.get('page', '1')
+        try:
+            page = pages.page(page_num)
+        except EmptyPage:
+            page = pages.page(1)
 
-@login_required
-def alltodo(request):
-    todos = Todo.objects.filter(user=request.user, completed_time=None).order_by( '-created_time')
-    todo_count = len(todos)
-    pages = Paginator(todos, 10)
-    page_num = request.GET.get('page', 1)
-    try:
-        page = pages.page(page_num)
-    except EmptyPage:
-        page = pages.page(1)
-    params = {'todos': todos, 'todo_count': todo_count, 'page' : page}
-    return render(request, 'todo/alltodo.html', params)
+        params = {'todos': todos, 'query' : query, 'page':page }
+        return render(request, 'todo/search.html', params)
+
+    return render(request, 'todo/search.html', )
+
 
 @login_required
 def allcompletedtodo(request):
     completed_todos = Todo.objects.filter(user=request.user, completed_time__isnull=False).order_by('-completed_time')
-    completedtodo_count = len(completed_todos)
     pages = Paginator(completed_todos, 10)
     page_num = request.GET.get('page', 1)
     try:
         page = pages.page(page_num)
     except EmptyPage:
         page = pages.page(1)
-    params = {'comps': completed_todos, 'comp_count' : completedtodo_count, 'page' : page}
+    params = {'comps': completed_todos, 'page' : page}
 
     return render(request, 'todo/allcompletetodo.html', params)
 
@@ -127,8 +120,9 @@ def allcompletedtodo(request):
 def viewtodo(request, tid):
 
     todo = get_object_or_404(Todo, pk=tid, user=request.user)
+    view_url = '/viewtodo/' + str(tid)
     form = TodoForm(instance=todo)
-    params = {'todo': todo, 'form' : form }
+    params = {'todo': todo, 'form' : form,  'view_url' : view_url }
     if request.method == 'GET':
         return render(request, 'todo/viewtodo.html', params)
     try:
@@ -136,28 +130,56 @@ def viewtodo(request, tid):
         formtodo.save()
     except ValueError:
         form = TodoForm(instance=todo)
-        params = {'todo': todo, 'form' : form }
+        view_url = '/viewtodo/' + str(tid)
+        params = {'todo': todo, 'form' : form, 'view_url' : view_url}
         params['error'] = 'Bad Values'
         return render(request, 'todo/viewtodo.html', params)
-
-    return redirect('todo:mytodo')
+    
+    url = request.POST.get('url', '/')
+    return redirect(url)
 
 @login_required
 def completetodo(request, tid):
     if request.method == 'POST':
         todo = get_object_or_404(Todo, pk=tid, user=request.user)
-        todo.completed_time = timezone.now()
+        if todo.completed_time:
+            todo.completed_time = None
+        else:
+            todo.completed_time = timezone.now()
+
         todo.save()
-    return redirect('todo:mytodo')
+        url = request.POST.get('url', '/')
+
+    return redirect(url)
+
+@login_required
+def imptodo(request, tid):
+    if request.method == 'POST':
+        todo = get_object_or_404(Todo, pk=tid, user=request.user)
+
+        url = request.POST.get('url', '/')
+
+        if todo.imp:
+            todo.imp = False
+        else:
+            todo.imp = True
+        todo.save()
+
+    return redirect(url)
 
 @login_required
 def deletetodo(request, tid):
     if request.method == 'POST':
         todo = get_object_or_404(Todo, pk=tid, user=request.user)
         todo.delete()
-    return redirect('todo:mytodo')
+        url = request.POST.get('url', '/')
+        if re.search('/viewtodo/',url):
+            url = '/'
 
 
+    return redirect(url)
+
+@login_required
 def logoutuser(request):
     if request.method == "POST":
         logout(request)

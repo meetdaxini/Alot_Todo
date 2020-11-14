@@ -1,26 +1,61 @@
 {% extends 'todo/base.html' %}
 
 {% block title%}
-AloTodo
+update
 {% endblock%}
 
 {% block content%}
-<p>{{error}}</p>
-<form action="" method="POST">
-{% csrf_token %}
-{{form.as_p}}
-<button type="submit">update</button>
-</form>
+<div class="container d-flex justify-content-center">
+        <div class="todo__flex">
+            <div class="update-flex  todo-list shadow-lg bg-white rounded">
+                <div class="add-head justify-content-center p-2">
+                    <h1>Update Todo</h1>
+                    <p>{{error}}</p>
+                </div>
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="url" value="{{request.get_full_path}}">
 
-<form action="{% url 'todo:completetodo' todo.id %}" method="POST">
-{% csrf_token %}
-<button type="submit">complete</button>
-</form>
+                    <div class="form-group">
+                        <input class="form-control form-add p-2 mt-4 m-3 mb-4" value="{{todo.task}}" name="task" placeholder="Task" required>
+                        <textarea class="form-control form-desc p-2 m-3 mb-4" rows="6" name="desc"
+                            placeholder="Description"> {{todo.desc}} </textarea>
+                    </div>
+                    <div class="custom-control custom-switch mb-2">
+                        <input type="checkbox" class="custom-control-input" id="imp" name='imp'  value="True" {% if todo.imp %}checked{% endif %}>
+                        <label class="custom-control-label" for="imp"><i
+                                class="bx bxs-error bx-flashing-hover bx-sm">Important!</i></label>
+                    </div>
+                    <div class="mb-4">
+                        <h4>
+                         <button type="submit" formaction="{% url 'todo:completetodo' todo.id %}"
+              class="button__list button__check"><i class='bx {% if todo.completed_time %}bx-checkbox-checked{% else %}bx-checkbox{% endif %}  bx-sm'> complete status </i></button> 
 
-<form action="{% url 'todo:deletetodo' todo.id %}" method="POST">
-{% csrf_token %}
-<button type="submit">delete</button>
-</form>
+                        </h4>
+                    {% if todo.completed_time %}
+                    Completed at : {{ todo.completed_time }}
+                    {% endif %}
+                        
+                    </div>
+                    <div class="d-flex justify-content-center mb-4">
+                        <button type="submit" class="btn btn-body nav-link a-body" formaction="{% url 'todo:viewtodo' todo.id %}">
+                            <h2 class='ml-3 mr-3'>Save</h2></button>
+                        <button type="submit" class="btn btn-body nav-link a-body del-btn" formaction="{% url 'todo:deletetodo' todo.id %}">
+                            <h2 class='ml-2 mr-2'>Delete</h2></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div>
+         <div class="d-flex justify-content-center">
+  <button type="button" class="btn btn-body">
+    <a class="nav-link a-body" href="{% url 'todo:home' %}"><i
+        class='bx bx-checkbox bx-xs'>View Remaining</i></a></button>
+  <button type="button" class="btn btn-body">
+    <a class="nav-link a-body" href="{% url 'todo:allcompletedtodo' %}"><i
+        class='bx bx-checkbox-checked bx-xs'>View Completed</i></a></button>
+  </div>
+
 
 
 {% endblock content%}

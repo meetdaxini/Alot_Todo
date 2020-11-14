@@ -1,14 +1,12 @@
 from django.forms import ModelForm
 from .models import Todo
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django import forms
 
 class TodoForm(ModelForm):
     class Meta:
         model = Todo
         fields = ['task', 'desc', 'imp']
-
-from django.contrib.auth.forms import UserCreationForm
-from django import forms
 
 class UserCreateForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -18,8 +16,4 @@ class UserCreateForm(UserCreationForm):
 
         for fieldname in ['username', 'password1', 'password2']:
             self.fields[fieldname].help_text = None
-
-
-
-print(UserCreateForm())
 
