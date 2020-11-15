@@ -4,3 +4,4 @@
 ![Frontend](https://img.shields.io/badge/Frontend-HTML/CSS-green)
 
 Alot_Todo is a task manager app made using django.
+Live at : https://alot-todo.herokuapp.com/
