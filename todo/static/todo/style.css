@@ -357,13 +357,12 @@ nav {
 
 /* media-queries */
 
-@media (max-width: 768px) {
-  .form-inline .form-control {
-    width: 30rem;
-  }
+  @media (min-width: 768px) and (max-width: 800px){
+
   .todo__flex {
     flex-direction: column;
     justify-content: center;
+    align-items: center;
   }
   .navbar {
     position: relative;
@@ -400,6 +399,8 @@ nav {
   .todo__flex {
     flex-direction: column;
     justify-content: center;
+    align-items: center;
+
   }
   .navbar {
     position: relative;
@@ -449,6 +450,14 @@ nav {
   .btn-body{
     margin-bottom: 2rem;
 
+  }
+
+  
+}
+
+@media screen and (min-width: 1024px){
+  .form-inline .form-control {
+    width: 30rem;
   }
 }
 

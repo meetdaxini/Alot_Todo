@@ -12,6 +12,8 @@ django-html = "*"
 django = "*"
 django-crispy-forms = "*"
 whitenoise = "*"
+gunicorn = "*"
+python-decouple = "*"
 
 [requires]
 python_version = "3.8"
