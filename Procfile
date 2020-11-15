@@ -1,0 +1,1 @@
+web: gunicorn Alot_Todo.wsgi

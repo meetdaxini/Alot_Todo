@@ -11,6 +11,7 @@ pylint-django = "*"
 django-html = "*"
 django = "*"
 django-crispy-forms = "*"
+whitenoise = "*"
 
 [requires]
 python_version = "3.8"
