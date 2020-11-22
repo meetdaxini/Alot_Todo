@@ -24,10 +24,9 @@
   box-sizing: border-box;
 }
 
-html{
+html {
   scroll-behavior: smooth;
   min-height: 100vh;
-
 }
 
 body {
@@ -138,9 +137,8 @@ nav {
   background-color: transparent;
 }
 
-.textinput{
+.textinput {
   border: solid grey;
-  
 }
 
 /* ===== todo home =====*/
@@ -262,6 +260,7 @@ nav {
 
 .add-head {
   display: flex;
+  flex-direction: column;
   background-color: var(--text-color);
   color: aliceblue;
   vertical-align: super;
@@ -296,6 +295,13 @@ nav {
   color: red;
 }
 
+.add__error {
+  color: red;
+  margin: 0;
+  padding: 0;
+  font-size: var(--normal-font-size);
+}
+
 /* ===== FOOTER =====*/
 
 .footer {
@@ -328,6 +334,14 @@ nav {
   color: var(--first-color);
 }
 
+.portdolio__link {
+  color: var(--first-color);
+}
+
+.portdolio__link:hover {
+  color: var(--first-color-lighten);
+}
+
 /* github fork icon */
 
 .github-corner svg {
@@ -357,8 +371,7 @@ nav {
 
 /* media-queries */
 
-  @media (min-width: 768px) and (max-width: 800px){
-
+@media (min-width: 768px) and (max-width: 800px) {
   .todo__flex {
     flex-direction: column;
     justify-content: center;
@@ -374,7 +387,6 @@ nav {
     margin-left: -50px !important;
     display: block;
   }
-
 }
 
 @media (max-width: 600px) {
@@ -387,7 +399,6 @@ nav {
   h3 {
     font-size: var(--h3-font-size);
   }
-
   .btn-primary {
     margin: 0.5rem;
     padding: 0rem 0.5rem;
@@ -400,7 +411,6 @@ nav {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
   }
   .navbar {
     position: relative;
@@ -416,49 +426,35 @@ nav {
     max-width: 280px;
     margin-bottom: 3rem;
   }
-
   .control-label {
     margin-bottom: 10px;
   }
-
-  .controls input{
+  .controls input {
     margin-bottom: 10px;
   }
-  
-
-  .add-flex{
+  .add-flex {
     max-width: 20rem;
   }
-  
-  .todo-list{
+  .todo-list {
     width: 20rem;
     min-height: 27rem;
-
   }
-  .todo__list{
+  .todo__list {
     font-size: smaller;
   }
   .todo-title {
     min-width: 14rem;
   }
-  
   .button__list {
     margin-top: 0rem;
-
   }
-
-  .btn-body{
+  .btn-body {
     margin-bottom: 2rem;
-
   }
-
-  
 }
 
-@media screen and (min-width: 1024px){
+@media screen and (min-width: 1024px) {
   .form-inline .form-control {
     width: 30rem;
   }
 }
-
-

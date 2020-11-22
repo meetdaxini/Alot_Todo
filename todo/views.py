@@ -11,6 +11,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage
 import re
 from django.contrib import messages
+from django.http import JsonResponse
+
 
 
 # Create your views here.
@@ -75,7 +77,7 @@ def addtodo(request):
             newtodo.user = request.user
             newtodo.save()
         except ValueError:
-            messages.error(request, 'Bad Data Entered' )
+            messages.error(request, 'Bad Data Entered: Max length of task is 100 chars' )
         
         url = request.POST.get('url', '/')
         return redirect(url)
@@ -132,7 +134,7 @@ def viewtodo(request, tid):
         form = TodoForm(instance=todo)
         view_url = '/viewtodo/' + str(tid)
         params = {'todo': todo, 'form' : form, 'view_url' : view_url}
-        params['error'] = 'Bad Values'
+        messages.error(request, 'Bad Data Entered: Max length of task is 100 chars' )
         return render(request, 'todo/viewtodo.html', params)
     
     url = request.POST.get('url', '/')
@@ -184,3 +186,14 @@ def logoutuser(request):
     if request.method == "POST":
         logout(request)
     return redirect('todo:home')
+
+@login_required
+def auto_complete(request):
+    query = request.GET['term']
+    # print(query)
+    or_query = Q(task__icontains=query)
+    or_query.add(Q(desc__icontains=query), Q.OR)
+    todo_matches = Todo.objects.filter(or_query, user=request.user).order_by( '-created_time', '-completed_time', '-imp', )
+    tasks = [todo.task for todo in todo_matches][:15]
+    tasks_json = JsonResponse(tasks, safe=False)
+    return tasks_json

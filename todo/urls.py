@@ -15,6 +15,7 @@ urlpatterns = [
     path('completetodo/<int:tid>/complete', views.completetodo, name='completetodo'),
     path('deletetodo/<int:tid>/delete', views.deletetodo, name='deletetodo'),
     path('imptodo/<int:tid>/imp', views.imptodo, name='imptodo'),
+    path('auto_complete', views.auto_complete, name='auto_complete')
 
 
 ]

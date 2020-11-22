@@ -4,6 +4,14 @@
 completed todo
 {% endblock%}
 
+{% block dropdownview %}
+<a class="dropdown-item" href="{% url 'todo:home' %}">
+<i class='bx bx-checkbox bx-lg'>View Remaining</i>
+</a>
+{% endblock%}
+
+
+
 {% block content%}
 
 <!-- todos -->
